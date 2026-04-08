@@ -1,55 +1,70 @@
- @github/copilot
-Создай монорепозиторий проекта "Adapt SymbioSystem" и реализуй полностью рабочий MVP в одном целостном решении.
+# Adapt SymbioSystem — piZdabolot
 
-Цель:
-Построить симбиотическую экосистему нового поколения с автономным движком, живой смысловой средой и визуальным интерфейсом, минимально сложную по коду, но максимально умную, расширяемую и устойчивую.
+> Симбиотическая экосистема нового поколения с автономным движком, живой смысловой средой и визуальным интерфейсом.
 
-Требования к архитектуре:
-1. Модули:
-   - core/symbio_core — ядро профиля Adapt: принципы, стиль, правила, интерпретация намерений.
-   - core/symbio_hive — живая экосистема: онтология, сущности, связи, рост, эволюция.
-   - engine/symbio_flow — автономный движок: приём намерения, план, выполнение, анти-loop, разрыв шаблонов.
-   - ui/mind_palace — веб-интерфейс для визуализации дерева/роя/поля смыслов.
-   - meta/revolution — дорожная карта, сценарии использования, тестовые истории.
+## Overview
 
-2. Технологический стек:
-   - Backend: Python + FastAPI.
-   - Хранение: PostgreSQL с graph-слоем (например, через таблицы связей или простую graph-абстракцию).
-   - Frontend: React + d3.js (или аналог) для визуализации графа/дерева.
-   - Инфраструктура: Docker + docker-compose для локального запуска.
-   - CI: GitHub Actions для сборки и базовых тестов.
+Adapt SymbioSystem — это монорепозиторий с полностью рабочим MVP для симбиотической AI-экосистемы:
 
-3. Автономность и автогенерация:
-   - Добавь модуль engine/autogen, который по текстовому намерению (строка) может:
-     - создавать новые сущности в SymbioHive,
-     - добавлять связи,
-     - расширять онтологию,
-     - создавать базовые файлы/модули по шаблону.
-   - Реализуй простой REST-эндпоинт: POST /intent → SymbioFlow:
-     - принимает текст намерения,
-     - интерпретирует его через SymbioCore,
-     - при необходимости вызывает autogen,
-     - возвращает структурированный результат (план/действие/созданные сущности).
+- **SymbioCore** — ядро интерпретации намерений (parse →结构化)
+- **SymbioHive** — живая экосистема: онтология, сущности, связи
+- **SymbioFlow** — автономный движок: приём намерения → план → выполнение
+- **Autogen** — автогенерация сущностей и связей по тексту
+- **MindPalace UI** — React + d3.js визуализация графа смыслов
 
-4. MindPalace UI:
-   - Отобрази:
-     - список сущностей,
-     - связи в виде графа/дерева,
-     - базовую карточку сущности.
-   - Подключи к backend API.
+## Quick Start
 
-5. MVP-критерий:
-   - Проект должен подниматься командой `docker-compose up`.
-   - Должен быть доступен:
-     - backend API (FastAPI),
-     - frontend (MindPalace),
-     - базовый сценарий: отправить намерение → получить осмысленный ответ → увидеть изменения в графе.
+```bash
+# Install & run with Docker
+make up
 
-6. Принципы кода:
-   - Минимум сложности, максимум ясности.
-   - Структура и логика важнее "красоты" фреймворков.
-   - Код должен быть легко расширяемым: добавление новых сущностей, связей, стратегий SymbioFlow.
-   - Не перегружай архитектуру, но заложи понятные точки расширения.
+# Or run locally
+pip install -r backend/requirements.txt
+make backend   # starts FastAPI on :8000
+make frontend  # starts MindPalace on :3000
+```
 
-Требование по поведению:
-Работай автономно: сам создай структуру папок, файлы, код, конфигурации, Docker-окружение, CI и базовую документацию (README.md), не задавая дополнительных вопросов. Строй решение как единый живой организм, а не набор разрозненных модулей.
+Open http://localhost:8000/docs for API docs, http://localhost:3000 for MindPalace UI.
+
+## API Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/intent` | Process text intent → parse → execute |
+| GET | `/entities` | List all entities |
+| GET | `/links` | List all links |
+| POST | `/entity` | Create entity directly |
+| POST | `/link` | Create link directly |
+| GET | `/stats` | Ecosystem statistics |
+| GET | `/health` | Health check |
+
+## Architecture
+
+```
+core/
+├── symbio_core/     # Intent interpretation (rules.py)
+└── symbio_hive/     # Entity & link management (hive.py)
+engine/
+├── symbio_flow/     # Intent → parse → execute pipeline
+└── autogen/         # Auto-generation of entities/links
+backend/
+├── main.py          # FastAPI server (7 endpoints)
+├── models.py        # SQLAlchemy ORM (Entity, Link)
+└── db.py            # PostgreSQL connection
+ui/mind_palace/
+├── src/App.jsx      # React dashboard
+├── src/Graph.jsx    # d3.js force-directed graph
+└── src/EntityCard.jsx # Entity detail card
+meta/revolution/     # Roadmap, stories, use cases
+```
+
+## Tech Stack
+
+- **Backend**: Python 3.11 + FastAPI + SQLAlchemy + PostgreSQL
+- **Frontend**: React 18 + d3.js (force-directed graph)
+- **Infrastructure**: Docker + docker-compose
+- **CI**: GitHub Actions (backend tests + Docker build)
+
+## License
+
+MIT — OnTheFox 2026
