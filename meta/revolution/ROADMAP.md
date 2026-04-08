@@ -1,33 +1,173 @@
-# Adapt SymbioSystem: Roadmap
+# SymbioSystem — Roadmap
 
-## ✅ Completed (MVP)
-- [x] core/symbio_core — Intent interpretation (create, link, delete, query)
-- [x] core/symbio_hive — In-memory entity & link management
-- [x] engine/symbio_flow — Intent → parse → execute pipeline
-- [x] engine/autogen — Auto-generation via SQLAlchemy ORM
-- [x] backend — FastAPI server (7 endpoints) + PostgreSQL
-- [x] ui/mind_palace — React + d3.js force-directed graph
-- [x] Docker + docker-compose setup
-- [x] CI pipeline (backend tests + Docker build)
-- [x] Documentation (README, SECURITY, LICENSE)
+> Живой документ. Обновляется по мере развития проекта.
 
-## 🚧 In Progress
-- [ ] Real PostgreSQL integration in CI
-- [ ] MindPalace UI: real-time updates via WebSocket
-- [ ] Entity cards with full detail view
+---
 
-## 📋 Planned
-- [ ] LLM-powered intent parsing (GPT-4, Claude, Gemini)
-- [ ] Multi-agent coordination (Nexus-7 integration)
-- [ ] Shannon pentest agent integration for security testing
-- [ ] SWE-Agent integration for code-level vulnerability discovery
-- [ ] Token efficiency middleware (PruMerge-style prompt pruning)
-- [ ] Blockchain-backed DIDs for agent identity
-- [ ] Continuous red-teaming engine (The Gauntlet)
-- [ ] Constitutional AI alignment guardrails
-- [ ] OWASP LLM Top 10 automated scanning
-- [ ] Exploit chaining (Tenzai-style multi-stage attacks)
-- [ ] Behavioral reasoning for trust boundary analysis
-- [ ] Context relay for long-running sessions
-- [ ] Infection chain detection (AI worm protection)
-- [ ] SAST/DAST pipeline integration
+## ✅ Q2 2026 — SymbioCore v1 (MVP)
+
+**Цель:** Базовый MVP, готовый к демонстрации
+
+### Реализовано
+- [x] **SymbioCore** — интерпретация намерений (`core/symbio_core/rules.py`)
+  - Парсинг команд: создать, связать, удалить, запросить
+  - Валидация входных данных
+  - Обработка ошибок
+- [x] **SymbioHive** — живая экосистема (`core/symbio_hive/hive.py`)
+  - CRUD сущностей
+  - Управление связями
+  - Статистика онтологии
+- [x] **SymbioFlow** — автономный движок (`engine/symbio_flow/flow.py`)
+  - Пайплайн: приём → план → выполнение
+  - Anti-loop защита
+  - Обработка неизвестных намерений
+- [x] **Autogen** — автогенерация (`engine/autogen/autogen.py`)
+  - Создание сущностей по тексту
+  - Добавление связей
+  - Расширение онтологии
+- [x] **Backend** — FastAPI + PostgreSQL
+  - 7 REST эндпоинтов
+  - SQLAlchemy ORM
+  - Health check
+  - Pydantic валидация
+- [x] **MindPalace UI** — React + d3.js
+  - Force-directed граф
+  - Карточки сущностей
+  - Real-time API подключение
+- [x] **Инфраструктура**
+  - Docker + docker-compose
+  - GitHub Actions CI
+  - Makefile для разработки
+
+### Метрики
+- Эндпоинтов: 7
+- Тестов: 3 сценария
+- Размер репо: ~356KB (после очистки бинарников)
+- CI: ✅ Passing
+
+---
+
+## 🚧 Q3 2026 — Автономные агенты
+
+**Цель:** SymbioFlow работает без человеческого вмешательства
+
+### Планируется
+- [ ] **SymbioFlow autonomous agents**
+  - Агент-наблюдатель: мониторит изменения
+  - Агент-планировщик: строит планы действий
+  - Агент-исполнитель: выполняет планы
+  - Агент-ревизор: проверяет результаты
+- [ ] **Multi-agent coordination**
+  - Координация между агентами
+  - Разрешение конфликтов
+  - Приоритизация задач
+- [ ] **LLM-powered intent parsing**
+  - Интеграция с GPT-4, Claude, Gemini
+  - Семантическое понимание намерений
+  - Контекстная память
+- [ ] **Real-time WebSocket updates**
+  - Push-уведомления при изменениях
+  - Live-обновление графа
+  - Подписка на события
+- [ ] **Entity cards с деталями**
+  - Полная информация о сущности
+  - История изменений
+  - Связанные сущности
+  - Метрики
+
+### Метрики успеха
+- 5+ автономных агентов
+- <100ms задержка WebSocket
+- 90%+ точность LLM intent parsing
+- 100+ тестов
+
+---
+
+## 📋 Q4 2026 — MindPalace 2.0
+
+**Цель:** Продуктовая визуализация для end-user
+
+### Планируется
+- [ ] **Интерактивный граф**
+  - Фильтры по типу сущности
+  - Поиск и подсветка
+  - Зум и навигация
+  - Анимации переходов
+- [ ] **Временная шкала эволюции**
+  - Timeline роста онтологии
+  - Ключевые события
+  - Визуализация изменений
+- [ ] **Экспорт/импорт онтологии**
+  - JSON export
+  - GraphML export
+  - Импорт из внешних источников
+- [ ] **Плагины для IDE**
+  - VS Code extension
+  - JetBrains plugin
+  - Sublime Text plugin
+- [ ] **API rate limiting + auth**
+  - JWT аутентификация
+  - Rate limiting (100 req/min)
+  - API keys
+  - CORS policy
+
+### Метрики успеха
+- 3+ IDE плагина
+- <50ms API response time
+- 10K+ сущностей в графе без деградации
+- 500+ stars на GitHub
+
+---
+
+## 🔮 Q1 2027 — SymbioSystem Cloud
+
+**Цель:** Managed сервис для команд
+
+### Планируется
+- [ ] **Managed SymbioSystem сервис**
+  - Multi-tenant архитектура
+  - Изоляция данных
+  - Масштабирование
+- [ ] **Billing + quotas**
+  - Freemium модель
+  - Pro tier ($19/mo)
+  - Enterprise tier (custom)
+- [ ] **SymbioSystem Marketplace**
+  - Плагины от сообщества
+  - Шаблоны онтологий
+  - Интеграции
+- [ ] **Community-driven ontology**
+  - Публичные онтологии
+  - Fork + merge workflow
+  - Reputation system
+- [ ] **Enterprise features**
+  - SSO / SAML
+  - Audit logs
+  - SLA 99.9%
+  - Dedicated support
+
+### Метрики успеха
+- 1K+ активных пользователей
+- 99.9% uptime
+- $10K MRR
+- 10+ enterprise клиентов
+
+---
+
+## 📊 Трекер прогресса
+
+| Фаза | Статус | Прогресс |
+|------|--------|----------|
+| Q2 2026 — MVP | ✅ Завершено | 100% |
+| Q3 2026 — Агенты | 🚧 В работе | 0% |
+| Q4 2026 — MindPalace 2.0 | 📋 Запланировано | 0% |
+| Q1 2027 — Cloud | 🔮 Запланировано | 0% |
+
+---
+
+## 🧬 Принципы развития
+
+1. **Минимум сложности, максимум ясности** — каждая строчка кода должна быть понятна
+2. **Структура важнее красоты** — логика важнее фреймворков
+3. **Расширяемость** — добавление новых сущностей, связей, стратегий должно быть простым
+4. **Не перегружай, но закладывай точки расширения** — баланс MVP и будущего роста
