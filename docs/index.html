@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SymbioSystem — Симбиотическая AI-Экосистема</title>
+    <style>
+        /* ── Reset & Base ─────────────────────────────── */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-card-hover: #1a1a25;
+            --text: #e4e4e7;
+            --text-muted: #71717a;
+            --accent: #6366f1;
+            --accent-light: #818cf8;
+            --accent-glow: rgba(99, 102, 241, 0.15);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --border: #27272a;
+            --radius: 12px;
+            --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+            --mono: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ── Navigation ────────────────────────────────── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        nav .logo::before {
+            content: '◆';
+            font-size: 1.5rem;
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav .nav-links a:hover { color: var(--text); }
+
+        nav .cta-btn {
+            padding: 0.5rem 1.25rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        nav .cta-btn:hover {
+            background: var(--accent-light);
+            transform: translateY(-1px);
+        }
+
+        /* ── Hero Section ─────────────────────────────── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 50%, var(--accent-glow) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .hero-content { position: relative; z-index: 1; max-width: 800px; }
+
+        .hero .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--accent-glow);
+            border: 1px solid var(--accent);
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent-light);
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .hero .badge::before { content: '🟢'; }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, var(--accent-light) 50%, var(--success) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1.125rem, 2vw, 1.375rem);
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .hero .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 0.875rem 2rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            padding: 0.875rem 2rem;
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-muted);
+            background: var(--bg-card);
+        }
+
+        /* ── Stats Bar ────────────────────────────────── */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            padding: 2rem;
+            max-width: 900px;
+            margin: -2rem auto 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .stat .number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-light);
+        }
+
+        .stat .label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* ── Sections ─────────────────────────────────── */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        section .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        section .section-header h2 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        section .section-header p {
+            color: var(--text-muted);
+            font-size: 1.125rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ── Problem/Solution ─────────────────────────── */
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem, .solution {
+            padding: 2rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .problem {
+            background: linear-gradient(135deg, #1a0a0a, var(--bg-card));
+            border-color: #7f1d1d33;
+        }
+
+        .solution {
+            background: linear-gradient(135deg, #0a1a0a, var(--bg-card));
+            border-color: #10b98133;
+        }
+
+        .problem h3, .solution h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .problem h3::before { content: '❌'; }
+        .solution h3::before { content: '✅'; }
+
+        .problem ul, .solution ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .problem li, .solution li {
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--text-muted);
+        }
+
+        .problem li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #ef4444;
+        }
+
+        .solution li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+        }
+
+        /* ── Architecture Grid ────────────────────────── */
+        .arch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .arch-card {
+            padding: 1.75rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            transition: all 0.3s;
+        }
+
+        .arch-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+        }
+
+        .arch-card .icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-glow);
+            border-radius: 10px;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .arch-card h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .arch-card p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .arch-card .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            margin-top: 1rem;
+            padding: 0.25rem 0.75rem;
+            background: #10b98120;
+            border: 1px solid #10b98140;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        .arch-card .status::before { content: ''; width: 6px; height: 6px; background: var(--success); border-radius: 50%; }
+
+        /* ── API Endpoints ────────────────────────────── */
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        .api-table th, .api-table td {
+            padding: 0.875rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .api-table th {
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .api-table td:first-child {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+        }
+
+        .method {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .method.post { background: #10b98120; color: var(--success); }
+        .method.get { background: #3b82f620; color: #60a5fa; }
+
+        /* ── Roadmap ──────────────────────────────────── */
+        .roadmap {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .roadmap-item {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .roadmap-item.active { border-color: var(--accent); }
+        .roadmap-item.future { opacity: 0.6; }
+
+        .roadmap-item .quarter {
+            min-width: 80px;
+            padding: 0.5rem 0.75rem;
+            background: var(--accent-glow);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent-light);
+            text-align: center;
+        }
+
+        .roadmap-item h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .roadmap-item p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* ── CTA Section ──────────────────────────────── */
+        .cta-section {
+            text-align: center;
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, var(--bg) 0%, #0f0f1a 100%);
+        }
+
+        .cta-section h2 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            color: var(--text-muted);
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ── Footer ───────────────────────────────────── */
+        footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border);
+        }
+
+        footer a {
+            color: var(--accent-light);
+            text-decoration: none;
+        }
+
+        footer a:hover { text-decoration: underline; }
+
+        /* ── Code Block ───────────────────────────────── */
+        .code-block {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            overflow-x: auto;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: attr(data-lang);
+            position: absolute;
+            top: 0.5rem;
+            right: 0.75rem;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .code-block .comment { color: #6b7280; }
+        .code-block .keyword { color: #c084fc; }
+        .code-block .string { color: #34d399; }
+        .code-block .function { color: #60a5fa; }
+
+        /* ── Responsive ───────────────────────────────── */
+        @media (max-width: 768px) {
+            nav .nav-links { display: none; }
+            .hero { padding: 5rem 1.5rem 3rem; }
+            section { padding: 4rem 1.5rem; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── Navigation ──────────────────────────────────── -->
+<nav>
+    <a href="#" class="logo">SymbioSystem</a>
+    <ul class="nav-links">
+        <li><a href="#architecture">Архитектура</a></li>
+        <li><a href="#api">API</a></li>
+        <li><a href="#roadmap">Roadmap</a></li>
+        <li><a href="https://github.com/onthefox/piZdabolot" target="_blank">GitHub</a></li>
+    </ul>
+    <a href="#quickstart" class="cta-btn">Начать →</a>
+</nav>
+
+<!-- ── Hero ────────────────────────────────────────── -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="badge">MVP Ready — Q2 2026</div>
+        <h1>Симбиотическая AI-Экосистема</h1>
+        <p class="subtitle">
+            Интерпретирует намерения. Строит онтологию. Действует автономно.
+            Живой граф смыслов, который растёт и эволюционирует.
+        </p>
+        <div class="hero-actions">
+            <a href="#quickstart" class="btn-primary">🚀 Быстрый старт</a>
+            <a href="https://github.com/onthefox/piZdabolot" target="_blank" class="btn-secondary">⭐ GitHub</a>
+        </div>
+    </div>
+</section>
+
+<!-- ── Stats ───────────────────────────────────────── -->
+<div class="stats">
+    <div class="stat">
+        <div class="number">6</div>
+        <div class="label">Модулей</div>
+    </div>
+    <div class="stat">
+        <div class="number">7</div>
+        <div class="label">API Endpoints</div>
+    </div>
+    <div class="stat">
+        <div class="number">356KB</div>
+        <div class="label">Размер репо</div>
+    </div>
+    <div class="stat">
+        <div class="number">✅</div>
+        <div class="label">CI Passing</div>
+    </div>
+    <div class="stat">
+        <div class="number">MIT</div>
+        <div class="label">Лицензия</div>
+    </div>
+</div>
+
+<!-- ── Problem/Solution ────────────────────────────── -->
+<section id="why">
+    <div class="section-header">
+        <h2>Почему SymbioSystem?</h2>
+        <p>AI-ассистенты — одноразовые. SymbioSystem — живая экосистема.</p>
+    </div>
+    <div class="comparison">
+        <div class="problem">
+            <h3>Традиционные AI</h3>
+            <ul>
+                <li>Одноразовые запросы без контекста</li>
+                <li>Нет визуализации связей</li>
+                <li>Статические ответы</li>
+                <li>Нет автономности</li>
+                <li>Нет эволюции системы</li>
+            </ul>
+        </div>
+        <div class="solution">
+            <h3>SymbioSystem</h3>
+            <ul>
+                <li>Контекстная память намерений</li>
+                <li>MindPalace: живой граф смыслов</li>
+                <li>Растущая онтология</li>
+                <li>Автономный движок: намерение → действие</li>
+                <li>Эволюция через Autogen</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ── Architecture ────────────────────────────────── -->
+<section id="architecture">
+    <div class="section-header">
+        <h2>Архитектура</h2>
+        <p>6 модулей, 3 слоя, 1 экосистема</p>
+    </div>
+    <div class="arch-grid">
+        <div class="arch-card">
+            <div class="icon">🧠</div>
+            <h3>SymbioCore</h3>
+            <p>Интерпретация намерений. Парсинг команд, валидация, обработка ошибок.</p>
+            <div class="status">MVP готово</div>
+        </div>
+        <div class="arch-card">
+            <div class="icon">🐝</div>
+            <h3>SymbioHive</h3>
+            <p>Живая экосистема: онтология, сущности, связи. CRUD + статистика.</p>
+            <div class="status">MVP готово</div>
+        </div>
+        <div class="arch-card">
+            <div class="icon">⚡</div>
+            <h3>SymbioFlow</h3>
+            <p>Автономный движок: приём → план → выполнение. Anti-loop защита.</p>
+            <div class="status">MVP готово</div>
+        </div>
+        <div class="arch-card">
+            <div class="icon">🤖</div>
+            <h3>Autogen</h3>
+            <p>Автогенерация сущностей и связей по текстовому описанию.</p>
+            <div class="status">MVP готово</div>
+        </div>
+        <div class="arch-card">
+            <div class="icon">🔌</div>
+            <h3>Backend API</h3>
+            <p>FastAPI + PostgreSQL. 7 REST эндпоинтов, Pydantic валидация.</p>
+            <div class="status">MVP готово</div>
+        </div>
+        <div class="arch-card">
+            <div class="icon">🏰</div>
+            <h3>MindPalace UI</h3>
+            <p>React + d3.js force-directed граф. Карточки сущностей.</p>
+            <div class="status">MVP готово</div>
+        </div>
+    </div>
+</section>
+
+<!-- ── Quick Start ─────────────────────────────────── -->
+<section id="quickstart">
+    <div class="section-header">
+        <h2>Быстрый старт</h2>
+        <p>Одна команда — полный стек</p>
+    </div>
+    <div class="code-block" data-lang="bash">
+<span class="comment"># Поднять весь стек</span>
+$ <span class="function">make up</span>
+
+<span class="comment"># Отправить намерение</span>
+$ <span class="function">curl</span> -X POST http://localhost:8000/intent \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -d <span class="string">'{"intent": "создать Проект Адаптация"}'</span>
+
+<span class="comment"># Ответ</span>
+{
+  <span class="string">"action"</span>: <span class="string">"create"</span>,
+  <span class="string">"created"</span>: { <span class="string">"id"</span>: 1, <span class="string">"name"</span>: <span class="string">"Проект Адаптация"</span> }
+}
+    </div>
+</section>
+
+<!-- ── API ─────────────────────────────────────────── -->
+<section id="api">
+    <div class="section-header">
+        <h2>API Endpoints</h2>
+        <p>7 эндпоинтов. Полная документация на /docs</p>
+    </div>
+    <table class="api-table">
+        <thead>
+            <tr>
+                <th>Method</th>
+                <th>Path</th>
+                <th>Описание</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="method post">POST</span></td>
+                <td>/intent</td>
+                <td>Обработать текстовое намерение</td>
+            </tr>
+            <tr>
+                <td><span class="method get">GET</span></td>
+                <td>/entities</td>
+                <td>Список всех сущностей</td>
+            </tr>
+            <tr>
+                <td><span class="method get">GET</span></td>
+                <td>/links</td>
+                <td>Список всех связей</td>
+            </tr>
+            <tr>
+                <td><span class="method post">POST</span></td>
+                <td>/entity</td>
+                <td>Создать сущность напрямую</td>
+            </tr>
+            <tr>
+                <td><span class="method post">POST</span></td>
+                <td>/link</td>
+                <td>Создать связь напрямую</td>
+            </tr>
+            <tr>
+                <td><span class="method get">GET</span></td>
+                <td>/stats</td>
+                <td>Статистика экосистемы</td>
+            </tr>
+            <tr>
+                <td><span class="method get">GET</span></td>
+                <td>/health</td>
+                <td>Health check</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- ── Roadmap ─────────────────────────────────────── -->
+<section id="roadmap">
+    <div class="section-header">
+        <h2>Roadmap</h2>
+        <p>4 квартала. От MVP к облачной платформе.</p>
+    </div>
+    <div class="roadmap">
+        <div class="roadmap-item active">
+            <div class="quarter">Q2 2026</div>
+            <div>
+                <h4>✅ SymbioCore v1 — MVP</h4>
+                <p>6 модулей, 7 API endpoints, Docker, CI, MindPalace UI</p>
+            </div>
+        </div>
+        <div class="roadmap-item">
+            <div class="quarter">Q3 2026</div>
+            <div>
+                <h4>🚧 Автономные агенты</h4>
+                <p>LLM parsing, WebSocket, 5 автономных агентов, контекстная память</p>
+            </div>
+        </div>
+        <div class="roadmap-item future">
+            <div class="quarter">Q4 2026</div>
+            <div>
+                <h4>📋 MindPalace 2.0</h4>
+                <p>Интерактивный граф, timeline, dark mode, IDE плагины</p>
+            </div>
+        </div>
+        <div class="roadmap-item future">
+            <div class="quarter">Q1 2027</div>
+            <div>
+                <h4>🔮 SymbioSystem Cloud</h4>
+                <p>Multi-tenant, billing, marketplace, enterprise features</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── CTA ─────────────────────────────────────────── -->
+<section class="cta-section">
+    <h2>Готовы к симбиозу?</h2>
+    <p>Проект открыт для contributions. Подайте в Founders Hub или просто запустите.</p>
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="https://github.com/onthefox/piZdabolot" target="_blank" class="btn-primary">⭐ GitHub Repository</a>
+        <a href="https://github.com/onthefox/piZdabolot/issues" target="_blank" class="btn-secondary">📋 Issues (19)</a>
+    </div>
+</section>
+
+<!-- ── Footer ──────────────────────────────────────── -->
+<footer>
+    <p>
+        MIT License © 2026 <a href="https://github.com/onthefox" target="_blank">OnTheFox</a>
+        &nbsp;·&nbsp;
+        <a href="https://github.com/onthefox/piZdabolot/blob/release/README.md" target="_blank">Docs</a>
+        &nbsp;·&nbsp;
+        <a href="https://github.com/onthefox/piZdabolot/blob/release/CONTRIBUTING.md" target="_blank">Contributing</a>
+    </p>
+</footer>
+
+</body>
+</html>
