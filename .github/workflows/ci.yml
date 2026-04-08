@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: ["release"]
+  pull_request:
+    branches: ["release"]
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: symbio
+          POSTGRES_USER: symbio
+          POSTGRES_PASSWORD: symbio
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install backend deps
+        run: cd backend && pip install -r requirements.txt
+
+      - name: Run tests
+        env:
+          POSTGRES_DB: symbio
+          POSTGRES_USER: symbio
+          POSTGRES_PASSWORD: symbio
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+        run: |
+          cd backend
+          python -c "from backend.db import init_db; init_db()"
+          python -c "
+          from backend.db import SessionLocal
+          from engine.symbio_flow import handle_intent
+          from core.symbio_core import interpret_intent
+          db = SessionLocal()
+          r = handle_intent('создать Тест', db)
+          assert r.get('created'), f'Expected created, got: {r}'
+          print('✅ Intent test passed:', r)
+          r2 = handle_intent('связать Тест и Огород', db)
+          assert 'error' in r2, 'Expected error for missing entity'
+          print('✅ Link error test passed:', r2)
+          db.close()
+          "
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build backend
+        run: docker build -t symbio-backend ./backend
+      - name: Build frontend
+        run: docker build -t symbio-ui ./ui/mind_palace
