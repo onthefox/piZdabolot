@@ -1,63 +1,55 @@
-# GitHub Copilot for Vim and Neovim
+ @github/copilot
+Создай монорепозиторий проекта "Adapt SymbioSystem" и реализуй полностью рабочий MVP в одном целостном решении.
 
-GitHub Copilot is an AI pair programmer tool that helps you write code faster
-and smarter. Trained on billions of lines of public code, GitHub Copilot turns
-natural language prompts including comments and method names into coding
-suggestions across dozens of languages.
+Цель:
+Построить симбиотическую экосистему нового поколения с автономным движком, живой смысловой средой и визуальным интерфейсом, минимально сложную по коду, но максимально умную, расширяемую и устойчивую.
 
-Copilot.vim is a Vim/Neovim plugin for GitHub Copilot.
+Требования к архитектуре:
+1. Модули:
+   - core/symbio_core — ядро профиля Adapt: принципы, стиль, правила, интерпретация намерений.
+   - core/symbio_hive — живая экосистема: онтология, сущности, связи, рост, эволюция.
+   - engine/symbio_flow — автономный движок: приём намерения, план, выполнение, анти-loop, разрыв шаблонов.
+   - ui/mind_palace — веб-интерфейс для визуализации дерева/роя/поля смыслов.
+   - meta/revolution — дорожная карта, сценарии использования, тестовые истории.
 
-To learn more, visit
-[https://github.com/features/copilot](https://github.com/features/copilot).
+2. Технологический стек:
+   - Backend: Python + FastAPI.
+   - Хранение: PostgreSQL с graph-слоем (например, через таблицы связей или простую graph-абстракцию).
+   - Frontend: React + d3.js (или аналог) для визуализации графа/дерева.
+   - Инфраструктура: Docker + docker-compose для локального запуска.
+   - CI: GitHub Actions для сборки и базовых тестов.
 
-## Getting access to GitHub Copilot
+3. Автономность и автогенерация:
+   - Добавь модуль engine/autogen, который по текстовому намерению (строка) может:
+     - создавать новые сущности в SymbioHive,
+     - добавлять связи,
+     - расширять онтологию,
+     - создавать базовые файлы/модули по шаблону.
+   - Реализуй простой REST-эндпоинт: POST /intent → SymbioFlow:
+     - принимает текст намерения,
+     - интерпретирует его через SymbioCore,
+     - при необходимости вызывает autogen,
+     - возвращает структурированный результат (план/действие/созданные сущности).
 
-To access GitHub Copilot, an active GitHub Copilot subscription is required.
-Sign up for [GitHub Copilot Free](https://github.com/settings/copilot), or
-request access from your enterprise admin.
+4. MindPalace UI:
+   - Отобрази:
+     - список сущностей,
+     - связи в виде графа/дерева,
+     - базовую карточку сущности.
+   - Подключи к backend API.
 
-## Getting started
+5. MVP-критерий:
+   - Проект должен подниматься командой `docker-compose up`.
+   - Должен быть доступен:
+     - backend API (FastAPI),
+     - frontend (MindPalace),
+     - базовый сценарий: отправить намерение → получить осмысленный ответ → увидеть изменения в графе.
 
-1.  Install [Neovim][] or the latest patch of [Vim][] (9.0.0185 or newer).
+6. Принципы кода:
+   - Минимум сложности, максимум ясности.
+   - Структура и логика важнее "красоты" фреймворков.
+   - Код должен быть легко расширяемым: добавление новых сущностей, связей, стратегий SymbioFlow.
+   - Не перегружай архитектуру, но заложи понятные точки расширения.
 
-2.  Install [Node.js][].  If you use a package manager, make sure to install
-    NPM as well (e.g., `apt install nodejs npm` on Debian/Ubuntu).
-
-3.  Install `github/copilot.vim` using vim-plug, lazy.nvim, or any other
-    plugin manager.  Or to install manually, run one of the following
-    commands:
-
-    * Vim, Linux/macOS:
-
-          git clone --depth=1 https://github.com/github/copilot.vim.git \
-            ~/.vim/pack/github/start/copilot.vim
-
-    * Neovim, Linux/macOS:
-
-          git clone --depth=1 https://github.com/github/copilot.vim.git \
-            ~/.config/nvim/pack/github/start/copilot.vim
-
-    * Vim, Windows (PowerShell command):
-
-          git clone --depth=1 https://github.com/github/copilot.vim.git `
-            $HOME/vimfiles/pack/github/start/copilot.vim
-
-    * Neovim, Windows (PowerShell command):
-
-          git clone --depth=1 https://github.com/github/copilot.vim.git `
-            $HOME/AppData/Local/nvim/pack/github/start/copilot.vim
-
-4.  Start Vim/Neovim and invoke `:Copilot setup`.
-
-[Node.js]: https://nodejs.org/en/download/
-[Neovim]: https://github.com/neovim/neovim/releases/latest
-[Vim]: https://github.com/vim/vim
-
-Suggestions are displayed inline and can be accepted by pressing the tab key.
-See `:help copilot` for more information.
-
-## Troubleshooting
-
-We’d love to get your help in making GitHub Copilot better!  If you have
-feedback or encounter any problems, please reach out on our [feedback
-forum](https://github.com/github/copilot.vim/issues).
+Требование по поведению:
+Работай автономно: сам создай структуру папок, файлы, код, конфигурации, Docker-окружение, CI и базовую документацию (README.md), не задавая дополнительных вопросов. Строй решение как единый живой организм, а не набор разрозненных модулей.
